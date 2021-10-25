@@ -5,7 +5,8 @@
     <h4>Welcome <%= @user_name %>!</h4>
     <p>Use the navigation bar at the top of the page to get started.</p>
   <% else %>
-    <%= link_to "Click here to sign in", "/auth/microsoft_graph_auth", method: :post, class: "btn btn-primary btn-large" %>
+    <%=form_tag "/auth/microsoft_graph_auth" %>
+      <%= submit_tag "Click here to sign in", method: :post, class: "btn btn-primary btn-large" %>
   <% end %>
 </div>
 
