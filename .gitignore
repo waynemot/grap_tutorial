@@ -40,3 +40,11 @@
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+.idea
+.browserslistrc
+.generators
+
+	ms_azure_client_secret_id
+	ms_azure_client_secret_value
+	test/controllers/auth_controller_test.rb
