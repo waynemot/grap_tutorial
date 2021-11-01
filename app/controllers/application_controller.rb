@@ -1,12 +1,18 @@
 class ApplicationController < ActionController::Base
   require 'microsoft_graph_auth'
   require 'oauth2'
+  # include CalendarHelper
 
   before_action :set_user
 
   def set_user
     @user_name = user_name
     @user_email = user_email
+    # Avatar URL:
+    # GET https://graph.microsoft.com/v1.0/me/photos/48x48/$value
+    # Content-Type: image/jpg
+
+    @user_avatar = get_user_photo(access_token)
   end
 
   def save_in_session(auth_hash)
@@ -35,7 +41,7 @@ class ApplicationController < ActionController::Base
     session[:user_timezone]
   end
 
-  def access_token
+  def session_access_token
     session[:graph_token_hash][:token]
   end
 
@@ -72,6 +78,17 @@ class ApplicationController < ActionController::Base
     else
       token_hash[:token]
     end
+  end
+
+  def get_user_photo(access_token)
+      @photo = get_photo(access_token)
+      unless @photo.nil?
+        f = File.binwrite(Rails.root.join("public","user_photo.jpg"), @photo)
+        #logger.info "photo: #{@photo.inspect}"
+
+        logger.info "path: #{Rails.root}/public/user_photo.jpg"
+        return "/user_photo.jpg"
+       end
   end
 
 end

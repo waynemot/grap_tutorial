@@ -5,7 +5,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <link rel="shortcut icon" href="favicon.png"/>
+    <link rel="shortcut icon" href="favicon.ico"/>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
       integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
@@ -33,6 +33,9 @@
               <li class="nav-item" data-turbolinks="false">
                 <%= link_to "Calendar", "/calendar", class: "nav-link#{' active' if controller.controller_name == 'calendar'}" %>
               </li>
+              <li>
+                <%= link_to "Create", "/calendar/new", class: "nav-link#{' active' if controller.controller_name == 'calendar'}" %>
+              </li>
             <% end %>
           </ul>
           <ul class="navbar-nav justify-content-end">
@@ -44,8 +47,8 @@
             <% if @user_name %>
               <li class="nav-item dropdown">
                 <a class="nav-link avatar-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                  <% if @user_avatar %>
-                    <img src=<%= @user_avatar %> class="rounded-circle align-self-center mr-2 profile-photo">
+                  <% if @user_avatar.present? %>
+                    <img src='<%= @user_avatar %>' class="rounded-circle align-self-center mr-2 profile-photo">
                   <% else %>
                     <%= image_tag "no-profile-photo.png", class: "rounded-circle align-self-center mr-2 profile-photo" %>
                   <% end %>
