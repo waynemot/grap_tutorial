@@ -23,6 +23,7 @@ class CalendarController < ApplicationController
         #if cal_group[:id]
         #  @cals << {cal_group[:id].to_s => get_calendars_for(access_token, cal_group[:id])}
         #end
+        logger.info "Name: #{cal_group[:name]}"
       end
 
     end
