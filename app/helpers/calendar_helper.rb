@@ -149,6 +149,10 @@ module CalendarHelper
 
   GRAPH_HOST = 'https://graph.microsoft.com'.freeze
 
+  def timezone
+    Time.now.localtime.zone
+  end
+
   def make_api_call(method, endpoint, token, headers = nil, params = nil, payload = nil)
     headers ||= {}
     headers[:Authorization] = "Bearer #{token}"
@@ -174,9 +178,9 @@ module CalendarHelper
 
   def get_all_calendars(token)
     get_calendars_url = '/v1.0/me/calendars'
-    # headers = {
-    #     'Prefer' => "outlook.timezone=\"#{timezone}\""
-    # }
+    headers = {
+         'Prefer' => "outlook.timezone=\"#{timezone}\""
+    }
 
     response = make_api_call 'GET', get_calendars_url, token #,headers
 
@@ -198,6 +202,17 @@ module CalendarHelper
     calendars_for_url = "/v1.0/me/calendarGroups/#{calendar_id}/calendars"
     #query = {'expand'=> :children}
     response = make_api_call "GET", calendars_for_url, token, {}, query
+    raise response.parsed_response.to_s || "Request returned #{response.code}" unless response.code == 200
+
+    response.parsed_response['value']
+  end
+
+  def get_events_for(token, calendar_id)
+    events_for_url = "/v1.0/me/calendarGroups/#{calendar_id}/calendars"
+    header = {
+      'Prefer' => "outlook.timezone=\"#{timezone}\""
+    }
+    response = make_api_call "GET", events_for_url, token, header #, query
     raise response.parsed_response.to_s || "Request returned #{response.code}" unless response.code == 200
 
     response.parsed_response['value']
