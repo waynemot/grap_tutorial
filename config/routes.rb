@@ -9,5 +9,6 @@ Rails.application.routes.draw do
   match '/auth/:provider/callback', :to => 'auth#callback', :via => [:get, :post]
   get 'auth/signout'
   get 'calendar', :to => 'calendar#index'
+  post 'calendar/new', :to => 'calendar#create'
 
 end
