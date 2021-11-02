@@ -69,9 +69,11 @@ class ApplicationController < ActionController::Base
     token_hash = session[:graph_token_hash]
 
     # Get the expiry time - 5 minutes
-    expiry = Time.at(token_hash[:expires_at] - 300)
-
-    if Time.now > expiry
+    expiry = Time.at(token_hash[:expires_at] - 300) unless token_hash.nil?
+    if expiry.nil?
+      nil
+      return
+    elsif Time.now > expiry
       # Token expired, refresh
       new_hash = refresh_tokens token_hash
       new_hash[:token]
@@ -81,7 +83,7 @@ class ApplicationController < ActionController::Base
   end
 
   def get_user_photo(access_token)
-      @photo = get_photo(access_token)
+      @photo = get_photo(access_token) unless access_token.nil?
       unless @photo.nil?
         f = File.binwrite(Rails.root.join("public","user_photo.jpg"), @photo)
         #logger.info "photo: #{@photo.inspect}"
